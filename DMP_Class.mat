@@ -130,7 +130,7 @@ methods  ( Access = public )
     end
 
     
-    function fit1 ( obj, s, ds, dds, time )
+    function fit1 ( obj, s, ds, dds, time )                                   % calculates weights 'w' using method fit1
     %----------------------------------------------------------------------
         obj.phase = reshape ( ( obj.phase0 : -obj.Ts : 0 ), [], 1 );
         obj.time  = time;
@@ -159,7 +159,7 @@ methods  ( Access = public )
     end
 
     
-    function fit2 ( obj, fd, s, time, dir )
+    function fit2 ( obj, fd, s, time, dir )                                 % calculates weights 'w' using method fit2
     %----------------------------------------------------------------------   
         if ( dir == 1 )
             obj.phase = reshape ( ( obj.phase0 : -obj.Ts : 0 ), [], 1 );
@@ -196,8 +196,8 @@ methods  ( Access = public )
     end
 
    
-    function get_forcing_function ( obj, dir )                                  % creates the non-linear forcing term
-    %----------------------------------------------------------------------
+    function get_forcing_function ( obj, dir )                                  % creates the non-linear forcing term as a
+    %----------------------------------------------------------------------     % 'sym' variable
         rbf_sum    = 0;
         rbf_sum_w  = 0;
         
