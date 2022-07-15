@@ -18,11 +18,6 @@ Here I leave attached the materials that helped me while writing the codes.
 - Benjamin Friedrich (2022). frenet_robust.zip (https://www.mathworks.com/matlabcentral/fileexchange/47885-frenet_robust-zip), MATLAB Central File Exchange. Retrieved July 15, 2022. 
 - Parallel Computing Toolbox : https://it.mathworks.com/help/parallel-computing/getting-started-with-parallel-computing-toolbox.html
 
-## Folders
-
-- **Features/_Common Features_** : most common and used features that can be extrapolated from a signal (power signals will be used here) ;
-- **Features/_VI trajectories_** : few features relative to VI trajectory analysis ;
-- **Features/_Power Features_** : algorithms relative to the computation of active, reactive and apparent power .
 
 ## Questions & Suggestions
 For any doubt, question or suggestion, please feel free to email at:
