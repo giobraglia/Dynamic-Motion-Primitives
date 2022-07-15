@@ -186,7 +186,7 @@ methods  ( Access = public )
     end
     
     
-    function get_fit_error ( obj, F, phase, fd )                                 % calculates the least square error between
+    function get_fit_error ( obj, F, phase, fd )                                 % calculates the mean square error between
     %----------------------------------------------------------------------      % the calculated forcing function and the
         simf = matlabFunction(F);                                                % desired one
         simf = simf( phase );
