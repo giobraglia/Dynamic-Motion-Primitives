@@ -1,3 +1,15 @@
+This Class enables to create DMP object for cartesian discrete motion. Here in this project we used a linear Canonical
+system to account for DMP phase and it was implemented indipendently, therefore this class enables just to fit a 
+trasformation system, providing in particular its forcing function. 
+Here methods are implemented using parfor for optimizing codes through parallel computation.
+Two fit methods here are presented based on different Transformation System representation:
+- fit1 -->
+- fit2 -->
+
+Please refer to DMP_example.mat for a correct implementation of the DMP_model
+
+
+
 
 %--------------------------------------------------------------------------
 classdef DMP_model < handle
@@ -6,19 +18,18 @@ classdef DMP_model < handle
 
 properties  ( GetAccess = public, SetAccess = public )
 %--------------------------------------------------------------------------
-        N        
+        N                                                                       % number of radial basis functions (RBF) used for interpolation
         T                                                                       % trajectory length
-        m            
-        a_z     
-        b_z       
-        a_py    
-        phase0      
-        t0                                                                      % smoothing period of 'Smoother.slx'
-        Ts  
-        var
-        begin 
-        goal 
-        c
+        m                                                                       % slope of linear Canonical System
+        a_z                                                                     % -----------------------------------
+        b_z                                                                     % parameters of Transformation System
+        a_py                                                                    % -----------------------------------
+        phase0                                                                  % initial value of the phase
+        Ts                                                                      % sampling period
+        var                                                                     % variance of RBFs
+        c                                                                       % centers of RBFs
+        begin                                                                   % initial position
+        goal                                                                    % final position
 end
 
 
@@ -30,12 +41,12 @@ properties  ( GetAccess = public, SetAccess = private )
         nfd                                                                     % desired  forcing function (BACKWARD)
         F                                                                       % computed forcing function (FORWARD)
         nF                                                                      % computed forcing function (BACKWARD)
-        w
-        nw
+        w                                                                       % weights (FORWARD)
+        nw                                                                      % weights (BACKWARD)
         rbf
         time
-        phase 
-        nphase
+        phase                                                                   % phase (FORWARD)    
+        nphase                                                                  % phase (BACKWARD)
         x
 end
 
@@ -43,8 +54,8 @@ end
 methods  ( Access = private )
 %--------------------------------------------------------------------------
 
-    function  get_rbfs ( obj ) 
-    %----------------------------------------------------------------------
+    function  get_rbfs ( obj )                                                 % creates a pool of 'N' RBFs 
+    %----------------------------------------------------------------------    % centered in 'c' and with variance 'var'
         RBF = cell ( [obj.N, 1] );
         C   = obj.c;
         k   = obj.var;
@@ -59,19 +70,18 @@ methods  ( Access = private )
     end 
     
 
-    function  get_kernels ( obj )
-    %----------------------------------------------------------------------
+    function  get_kernels ( obj )                                             % creates linearly spaced centers 'c'  
+    %----------------------------------------------------------------------   % for 'N' RBFs
         obj.c = linspace ( 0, obj.T, obj.N );
         obj.get_rbfs();
     end
 
    
-    function W = get_weights ( obj, phase, fd )                             ... obj = [...]
-    %----------------------------------------------------------------------
-        W   = zeros ( [obj.N,1] );
-        s   = ( phase );
+    function W = get_weights ( obj, phase, fd )                               % calculates weights 'w'
+    %----------------------------------------------------------------------   % how weight are calculated is explained 
+        W   = zeros ( [obj.N,1] );                                            % on the article relative to
+        s   = ( phase );                                                      % fit1 method
         RBF = obj.rbf;
-%         FD  = fd(:,2);
         FD  = fd;
         n   = obj.N;
 
@@ -120,7 +130,7 @@ methods  ( Access = public )
     end
 
     
-    function fit ( obj, s, ds, dds, time )
+    function fit1 ( obj, s, ds, dds, time )
     %----------------------------------------------------------------------
         obj.phase = reshape ( ( obj.phase0 : -obj.Ts : 0 ), [], 1 );
         obj.time  = time;
@@ -142,18 +152,6 @@ methods  ( Access = public )
                      - ds                           ...
                    )                                ...
                  );
-        
-%         obj.fd = (                                    ...
-%                    ( dds / obj.a_z ) -                ...
-%                    ( obj.b_z *                        ...                       fd = (dds/az-{bz*[g-s-(g-s0)*x/x0]+ds})/bz
-%                       (                               ...
-%                            obj.goal - s -             ...
-%                          ( obj.goal - obj.begin ) *   ...
-%                            obj.phase / obj.phase0     ...
-%                       )                               ...                        obj.phase' = x gives dim x 1 sym
-%                     +ds                               ...
-%                    )                                  ...
-%                  ) / ( obj.b_z );  
         
         obj.fd = [ obj.time, obj.fd ]; 
         obj.get_kernels();
@@ -187,43 +185,9 @@ methods  ( Access = public )
     end
     
     
-    function fit3 ( obj, y, dy, ddy, time, dir )
-    %----------------------------------------------------------------------   
-        if ( dir == 1 )
-            obj.phase = reshape ( ( obj.phase0 : -obj.Ts : 0 ), [], 1 );
-            obj.time  = time;
-
-            obj.sd    = y;
-            obj.begin = y(1);
-            obj.goal  = y(end);
-
-%             obj.fd = [ obj.time, fd ]; 
-            obj.fd =  ddy                                                   ...
-                      + ( obj.a_z * dy )                                    ...
-                      + ( obj.a_z * obj.b_z * y )                           ...
-                      - ( obj.a_z * obj.b_z * obj.goal )    ;
-            obj.get_kernels();
-            obj.w  = obj.get_weights( obj.phase, obj.fd );
-        end
-        
-        if ( dir == -1 )
-            obj.nphase = flip( obj.phase );
-            
-            obj.sd  = y;
-            obj.nfd =  ddy                                                   ...
-                       + ( obj.a_z * dy )                                    ...
-                       + ( obj.a_z * obj.b_z * y )                           ...
-                       - ( obj.a_z * obj.b_z * obj.goal )    ;
-            obj.get_kernels();
-            obj.nw = obj.get_weights( obj.nphase, obj.nfd - obj.nfd(1) );
-        end
-    end
-    
-    
-    
-    function get_fit_error ( obj, F, phase, fd )                                 ... get_fit_error (obj)
-    %----------------------------------------------------------------------    
-        simf = matlabFunction(F);
+    function get_fit_error ( obj, F, phase, fd )                                 % calculates the least square error between
+    %----------------------------------------------------------------------      % the calculated forcing function and the
+        simf = matlabFunction(F);                                                % desired one
         simf = simf( phase );
         simf = reshape ( simf, [], 1 );
 
@@ -232,7 +196,7 @@ methods  ( Access = public )
     end
 
    
-    function get_forcing_function ( obj, dir )
+    function get_forcing_function ( obj, dir )                                  % creates the non-linear forcing term
     %----------------------------------------------------------------------
         rbf_sum    = 0;
         rbf_sum_w  = 0;
@@ -268,4 +232,4 @@ end                                                                          % e
 
 
 
-end                                                                          % end DMP_Class
+end                                                                          % end DMP_model
