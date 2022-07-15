@@ -1,13 +1,14 @@
-This Class enables to create DMP object for cartesian discrete motion. Here in this project we used a linear Canonical
-system to account for DMP phase and it was implemented indipendently, therefore this class enables just to fit a 
-trasformation system, providing in particular its forcing function. 
-Here methods are implemented using parfor for optimizing codes through parallel computation.
-Two fit methods here are presented based on different Transformation System representation:
-- fit1 -->
-- fit2 -->
-
-Please refer to DMP_example.mat for a correct implementation of the DMP_model
-
+%  This Class enables to create DMP object for cartesian discrete motion. Here in this project we used a linear Canonical
+%  system to account for DMP phase and it was implemented indipendently, therefore this class enables just to fit a 
+%  trasformation system, providing in particular its forcing function. 
+%  Here methods are implemented using parfor for optimizing codes through parallel computation.
+%  Two fit methods here are presented based on different Transformation System representation:
+%  - fit1 -->  A. J. Ijspeert, J. Nakanishi, H. Hoffmann, P. Pastor and S. Schaal,
+%              "Dynamical Movement Primitives: Learning Attractor Models for Motor Behaviors" 
+%  - fit2 -->  A. J. Ijspeert, J. Nakanishi and S. Schaal, 
+%              "Movement imitation with nonlinear dynamical systems in humanoid robots" 
+%  
+%  Please refer to DMP_example.mat for a correct implementation of the DMP_model
 
 
 
