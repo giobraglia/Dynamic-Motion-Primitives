@@ -22,9 +22,8 @@ properties  ( GetAccess = public, SetAccess = public )
         N                                                                       % number of radial basis functions (RBF) used for interpolation
         T                                                                       % trajectory length
         m                                                                       % slope of linear Canonical System
-        a_z                                                                     % -----------------------------------
-        b_z                                                                     % parameters of Transformation System
-        a_py                                                                    % -----------------------------------
+        a_z                                                                     %   parameters of
+        b_z                                                                     %   Transformation System
         phase0                                                                  % initial value of the phase
         Ts                                                                      % sampling period
         var                                                                     % variance of RBFs
