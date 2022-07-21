@@ -21,8 +21,8 @@ Here I leave attached the materials that helped me while writing the codes.
 
 ## Folders
 
-- **Codes/DMP_Class.mat** : a DMP class to encode discrete movements in both forward and backward direction;
-- **Codes/DMP_example.mat** : a demonstration of a correct implementation of the DMP class;
+- **Codes/DMP_Class.m** : a DMP class to encode discrete movements in both forward and backward direction;
+- **Codes/DMP_example.m** : a demonstration of a correct implementation of the DMP class;
 
 ## Questions & Suggestions
 For any doubt, question or suggestion, please feel free to email at:
