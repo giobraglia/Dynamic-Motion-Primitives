@@ -3,7 +3,7 @@
 Here you can find a Dynamic Motion Primitive (DMP) class, specifically developed for Cartesian coordinates in the case of discrete movements. All scripts were written in matlab code, the class is optimized for Parallel Computing toolbox . 
 
 ## The project
-This codes are part of a project which aims at produce a custom way of performing rehabilitation of injured patients. This is done encoding cartesian trajectories with a reversible DMP fitted directly over the patient's execution of the desired exercise.
+This codes are part of a project which aims at produce a custom way of performing rehabilitation with the help of robots. This is done encoding cartesian trajectories with a reversible DMP fitted directly over the patient's execution of the desired exercise.
 
 The related article is still not ready.
 
