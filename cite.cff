@@ -1,0 +1,10 @@
+cff-version: 1.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Braglia
+    given-names: Giovanni
+    research gate: https://www.researchgate.net/profile/Giovanni-Braglia
+    orcid: https://orcid.org/0000-0002-2230-8191
+title: "Dynamic-Motion-Primitives repository"
+version: 1.0
+date-released: 2022-07-12
