@@ -1,4 +1,4 @@
-# Dynamic-Motion-Primitives
+# Dynamic-Motion-Primitives v1
 
 Here you can find a Dynamic Motion Primitive (DMP) class, specifically developed for Cartesian coordinates in the case of discrete movements. All scripts were written in matlab code, the class is optimized for Parallel Computing toolbox . 
 
